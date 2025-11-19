@@ -13,14 +13,24 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Sync Website Folder to S3
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'      # React recommended Node version
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build React App
+        run: npm run build
+
+      - name: Sync Build Folder to S3
         uses: jakejarvis/s3-sync-action@master
         with:
           args: --acl public-read --follow-symlinks --delete
         env:
-          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}     # your bucket name
+          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: "ap-south-1"           # e.g. ap-south-1
-          SOURCE_DIR: 'build'                          # <-- your folder
-
+          AWS_REGION: "ap-south-1"
+          SOURCE_DIR: 'build'
