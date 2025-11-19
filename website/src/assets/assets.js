@@ -72,7 +72,7 @@ export const assets = {
 export const albumsData = [
     {   
         id:0,
-        name: "Twin's Fav",
+        name: "Top 50 Universla",
         image: img8,
         desc:"Your weekly update of the most played tracks",
         bgColor:"#2a4365"
