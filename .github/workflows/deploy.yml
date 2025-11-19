@@ -16,14 +16,19 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
-          node-version: '18'      # React recommended Node version
+          node-version: '18'
 
+      # Install dependencies INSIDE spotify folder
       - name: Install Dependencies
         run: npm install
+        working-directory: spotify
 
-      - name: Build React App
+      # Build the Vite/React app INSIDE spotify folder
+      - name: Build Project
         run: npm run build
+        working-directory: spotify
 
+      # Upload the build folder to S3
       - name: Sync Build Folder to S3
         uses: jakejarvis/s3-sync-action@master
         with:
@@ -33,4 +38,4 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: "ap-south-1"
-          SOURCE_DIR: 'build'
+          SOURCE_DIR: 'spotify/dist'
